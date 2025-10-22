@@ -1,16 +1,17 @@
-// Mock users (replace with database later)
+
+
 const users = [
   { username: "admin", password: "admin123", role: "Barangay Official" },
 ];
 
 function loginUser(event) {
-  event.preventDefault(); // Prevent form refresh
+  event.preventDefault(); 
 
   const username = document.getElementById("username").value.trim();
   const password = document.getElementById("password").value.trim();
   const errorMessage = document.getElementById("error-message");
 
-  // Find matching user
+  // test
   const user = users.find(u => u.username === username && u.password === password);
 
   if (user) {
@@ -78,3 +79,4 @@ function loadPage(page) {
 function addResident() {
   alert("Add Resident form will appear here.");
 }
+
