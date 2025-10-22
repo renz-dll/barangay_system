@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Barangay Management System</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      display: flex;
+      height: 100vh;
+      background-color: #f4f6f9;
+    }
+
+    /* Sidebar */
+    .sidebar {
+      width: 220px;
+      background: #2c3e50;
+      color: white;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+    }
+    .sidebar h2 {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    .sidebar a {
+      color: white;
+      padding: 12px;
+      margin: 6px 0;
+      text-decoration: none;
+      display: block;
+      border-radius: 5px;
+      transition: background 0.3s;
+    }
+    .sidebar a:hover {
+      background: #34495e;
+    }
+
+    /* Main Content */
+    .main {
+      flex: 1;
+      padding: 20px;
+    }
+    .header {
+      background: white;
+      padding: 15px;
+      border-radius: 10px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    .content {
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 15px;
+    }
+    th, td {
+      padding: 10px;
+      border: 1px solid #ddd;
+      text-align: left;
+    }
+    th {
+      background: #2c3e50;
+      color: white;
+    }
+
+    .btn {
+      background: #27ae60;
+      color: white;
+      padding: 8px 12px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+    .btn:hover {
+      background: #219150;
+    }
+  </style>
+</head>
+<body onload="checkLogin()">
+  <div class="sidebar">
+    <h2>Barangay</h2>
+    <a href="#" onclick="loadPage('dashboard')">🏠 Dashboard</a>
+    <a href="#" onclick="loadPage('residents')">👥 Residents</a>
+    <a href="#" onclick="loadPage('certificates')">📜 Certificates</a>
+    <a href="#" onclick="loadPage('reports')">📊 Reports</a>
+    <a href="#" onclick="loadPage('settings')">⚙ Settings</a>
+    <a href="#" onclick="logout()">🚪 Logout</a>
+  </div>
+
+  <div class="main">
+    <div class="header">
+      <h1 id="page-title">Dashboard</h1>
+    </div>
+    <div class="content" id="content-area">
+      <p>Welcome to the Barangay Management System. Select a module from the sidebar.</p>
+    </div>
+  </div>
+
+  <script>
+    function loadPage(page) {
+      const title = document.getElementById('page-title');
+      const content = document.getElementById('content-area');
+
+      if (page === 'dashboard') {
+        title.innerText = "Dashboard";
+        content.innerHTML = "<p>Quick overview of barangay activities.</p>";
+      } else if (page === 'residents') {
+  title.innerText = "Residents";
+  content.innerHTML = `
+    <h3>Residents List</h3>
+    <button class="btn" onclick="addResident()">+ Add Resident</button>
+    <table id="residents-table">
+      <tr><th>Name</th><th>Address</th><th>Age</th></tr>
+    </table>
+  `;
+
+  // Fetch residents from backend
+  fetch('residents.php?action=list')
+    .then(res => res.json())
+    .then(data => {
+      const table = document.getElementById('residents-table');
+      data.forEach(r => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td>${r.first_name} ${r.last_name}</td>
+          <td>${r.address}</td>
+          <td>${r.age}</td>
+        `;
+        table.appendChild(row);
+      });
+    })
+    .catch(err => {
+      console.error("Error loading residents:", err);
+    });
+      } else if (page === 'certificates') {
+        title.innerText = "Certificates";
+        content.innerHTML = `
+          <h3>Certificate Issuance</h3>
+          <p>Issue barangay clearance, residency, and other certificates.</p>
+          <button class="btn">+ Issue Certificate</button>
+        `;
+      } else if (page === 'reports') {
+        title.innerText = "Reports";
+        content.innerHTML = "<h3>Barangay Reports</h3><p>Generate and view reports here.</p>";
+      } else if (page === 'settings') {
+        title.innerText = "Settings";
+        content.innerHTML = "<h3>System Settings</h3><p>Manage system preferences and accounts.</p>";
+      }
+    }
+
+    function addResident() {
+      alert("Add Resident form will appear here.");
+    }
+  </script>
+<script src="script.js"></script>
+</body>
+</html>
